@@ -20,7 +20,11 @@
 package de.khive.fastdata.ingest.pull
 
 import akka.actor.ActorSystem
+import akka.stream.scaladsl.Source
+import akka.stream.{ActorMaterializer, OverflowStrategy}
+import org.apache.kafka.clients.producer.ProducerRecord
 
+import scala.concurrent.duration._
 /**
   * Ingest Application<br/>
   * <br/>
@@ -31,12 +35,15 @@ import akka.actor.ActorSystem
 object IngestApplication extends App {
 
   val config = getConfig()
-  val system = ActorSystem("fd-ingest-pull")
-  val pullActorRef = system.actorOf(PullActor.props)
+  implicit val system = ActorSystem("fd-ingest-pull")
+  implicit val materializer = ActorMaterializer()
 
-  system.scheduler.schedule(5 seconds,  5 seconds, pullActorRef, DoPullRequest("http://", (String) => {
+  val pullSource = Source.actorRef[Array[Byte]](IngestConfig.SOURCE_ACTOR_BUFFER_SIZE, OverflowStrategy.fail)
+  val sink = KafkaStreamUtils.createIngestStream(config)(system)
+  val pullSourceRef = pullSource.map(payload => new ProducerRecord[String, Array[Byte]](config.forwardKafkaTopic, "", payload)).to(sink).run()
 
-  }))
+  import system.dispatcher
+  system.scheduler.schedule(0 seconds, config.pullDuration.toLong seconds, pullSourceRef, PullPayloadUtils.pullPayload(config.pullUrl))
 
   private def getConfig(): IngestConfig = {
     args match {
@@ -45,4 +52,15 @@ object IngestApplication extends App {
     }
   }
 
+}
+
+object IngestApplicationArgs extends Enumeration {
+  type IngestApplicationArgs = Value
+
+  val Url                     = Value(0)
+  val PullDuration            = Value(1)
+  val KafkaClientId           = Value(2)
+  val KafkaBootstrapServer    = Value(3)
+  val KafkaZookeeperConnect   = Value(4)
+  val KafkaTopic              = Value(5)
 }

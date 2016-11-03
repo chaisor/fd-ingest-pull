@@ -26,8 +26,21 @@ import com.typesafe.config.ConfigFactory
   */
 object IngestConfig {
 
-  def fromArgs(args: Array[String]): IngestConfig = {
+  val SOURCE_ACTOR_BUFFER_SIZE = 100
 
+  def fromArgs(args: Array[String]): IngestConfig = {
+    if(args.length != 6) {
+      throw new IllegalArgumentException("")
+    }
+
+    IngestConfig(
+      args(IngestApplicationArgs.Url.id),
+      args(IngestApplicationArgs.PullDuration.id).toInt,
+      args(IngestApplicationArgs.KafkaClientId.id),
+      args(IngestApplicationArgs.KafkaBootstrapServer.id),
+      args(IngestApplicationArgs.KafkaZookeeperConnect.id),
+      args(IngestApplicationArgs.KafkaTopic.id)
+    )
   }
 
   def fromApplicationConf(): IngestConfig = {

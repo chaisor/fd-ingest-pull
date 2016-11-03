@@ -19,40 +19,29 @@
 
 package de.khive.fastdata.ingest.pull
 
-import akka.actor.Actor
+import akka.Done
+import akka.actor.ActorSystem
 import akka.kafka.ProducerSettings
 import akka.kafka.scaladsl.Producer
+import akka.stream.scaladsl.Sink
+import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.{ByteArraySerializer, StringSerializer}
 
+import scala.concurrent.Future
+
 /**
-  * Kafka Raw Payload ingestion [[akka.actor.Actor]]
+  * Kafka Stream Utils
   *
   * Created by ceth on 03.11.16.
   */
-class KafkaIngestActor(config: IngestConfig) extends Actor {
+object KafkaStreamUtils {
 
-  val producerSettings = ProducerSettings(IngestApplication.system, new ByteArraySerializer, new StringSerializer)
-  // TODO: implement producer as reactive sink
-  //val producer = Producer.
+  def createIngestStream(config: IngestConfig)(implicit system: ActorSystem): Sink[ProducerRecord[String, Array[Byte]], Future[Done]] = {
+    val producerSettings = ProducerSettings[String, Array[Byte]](system, new StringSerializer, new ByteArraySerializer)
+      .withBootstrapServers(config.forwardKafkaBootstrapServer)
+      .withProperty("client.id", config.forwardKafkaClientId)
 
-  override def receive: Receive = {
-    case IngestPayload(payload) => ingest(payload)
-    case _ => throw new IllegalArgumentException(s"KafkaIngestActor accepts commands: ${IngestPayload.getClass.getName}")
-  }
-
-  def ingest(payload: Array[Byte]): Unit = {
-
+    Producer.plainSink(producerSettings)
   }
 
 }
-
-/**
-  * Base Actor Message Commands for [[KafkaIngestActor]]
-  */
-sealed trait KafkaIngestActorCommand
-
-/**
-  * Actor command for ingest payload onto
-  * @param payload
-  */
-case class IngestPayload(payload: Array[Byte])  extends KafkaIngestActorCommand

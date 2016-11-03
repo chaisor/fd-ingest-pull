@@ -19,47 +19,29 @@
 
 package de.khive.fastdata.ingest.pull
 
-import akka.actor.{Actor, Props}
+import java.nio.charset.StandardCharsets
+
+import org.slf4j.LoggerFactory
 
 import scala.io.Source
 
 /**
-  * Actor for pulling remote content
+  * Utils for pulling remote content and forward it
+  * to stream subscribers.
+  *
   * Created by ceth on 03.11.16.
   */
-class PullActor extends Actor {
+object PullPayloadUtils {
 
-  override def receive: Receive = {
-    case DoPullRequest(url, forwardFunction) => pull(url, forwardFunction)
-    case _ => throw new IllegalArgumentException(s"PullActor accepts commands: ${DoPullRequest.getClass.getName}")
-  }
+  val log = LoggerFactory.getLogger(getClass)
 
   /**
     * Pull content from <code>url</code> and forward it using the <code>forwardFunction</code>.
     *
     * @param url
-    * @param forwardFunction
     */
-  protected def pull(url: String, forwardFunction: (String) => Unit): Unit = forwardFunction(Source.fromURL(url).mkString)
-
-}
-
-/**
-  * Base Command Trait for PullActor Commands
-  */
-sealed trait PullActorCommand
-
-/**
-  * Send to pull actor with <code>url</code> to trigger a pull request
-  * and fetch the payload
-  *
-  * @param url
-  */
-case class DoPullRequest(url: String, forwardFunction: (String) => Unit) extends PullActorCommand
-
-/**
-  * PullActor Data
-  */
-object PullActor {
-  val props = Props[PullActor]
+  def pullPayload(url: String): Array[Byte] = {
+    log.debug(s"Pull payload from ${url}...")
+    Source.fromURL(url).mkString.getBytes(StandardCharsets.UTF_8)
+  }
 }
