@@ -43,6 +43,7 @@ libraryDependencies ++= {
     "com.typesafe.akka"           %% "akka-http-spray-json-experimental" % akkaV,
     "com.typesafe.akka"           %% "akka-http-testkit"                 % akkaV,
     "com.typesafe"                %  "config"                            % "1.3.0",
+    "com.typesafe.akka"           %% "akka-stream-kafka"                 % "0.13",
 
     "org.apache.spark"            %% "spark-streaming"                   % sparkV % "provided",
     "org.apache.spark"            %% "spark-mllib"                       % sparkV % "provided",
