@@ -21,17 +21,17 @@ package de.khive.fastdata.ingest.pull
 
 import akka.actor.ActorSystem
 import akka.stream.scaladsl.Source
-import akka.stream.{ActorMaterializer, OverflowStrategy}
+import akka.stream.{ ActorMaterializer, OverflowStrategy }
 import org.apache.kafka.clients.producer.ProducerRecord
 
 import scala.concurrent.duration._
 /**
-  * Ingest Application<br/>
-  * <br/>
-  * Entry point for pull ingest: contains main(..) method to run.
-  *
-  * Created by ceth on 03.11.16
-  */
+ * Ingest Application<br/>
+ * <br/>
+ * Entry point for pull ingest: contains main(..) method to run.
+ *
+ * Created by ceth on 03.11.16
+ */
 object IngestApplication extends App {
 
   val config = getConfig()
@@ -47,7 +47,7 @@ object IngestApplication extends App {
 
   private def getConfig(): IngestConfig = {
     args match {
-      case a:Array[String] if args.length > 0 => IngestConfig.fromArgs(args)
+      case a: Array[String] if args.length > 0 => IngestConfig.fromArgs(args)
       case _ => IngestConfig.fromApplicationConf()
     }
   }
@@ -57,10 +57,10 @@ object IngestApplication extends App {
 object IngestApplicationArgs extends Enumeration {
   type IngestApplicationArgs = Value
 
-  val Url                     = Value(0)
-  val PullDuration            = Value(1)
-  val KafkaClientId           = Value(2)
-  val KafkaBootstrapServer    = Value(3)
-  val KafkaZookeeperConnect   = Value(4)
-  val KafkaTopic              = Value(5)
+  val Url = Value(0)
+  val PullDuration = Value(1)
+  val KafkaClientId = Value(2)
+  val KafkaBootstrapServer = Value(3)
+  val KafkaZookeeperConnect = Value(4)
+  val KafkaTopic = Value(5)
 }

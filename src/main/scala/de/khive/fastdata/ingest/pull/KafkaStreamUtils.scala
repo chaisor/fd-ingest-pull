@@ -25,15 +25,15 @@ import akka.kafka.ProducerSettings
 import akka.kafka.scaladsl.Producer
 import akka.stream.scaladsl.Sink
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.common.serialization.{ByteArraySerializer, StringSerializer}
+import org.apache.kafka.common.serialization.{ ByteArraySerializer, StringSerializer }
 
 import scala.concurrent.Future
 
 /**
-  * Kafka Stream Utils
-  *
-  * Created by ceth on 03.11.16.
-  */
+ * Kafka Stream Utils
+ *
+ * Created by ceth on 03.11.16.
+ */
 object KafkaStreamUtils {
 
   def createIngestStream(config: IngestConfig)(implicit system: ActorSystem): Sink[ProducerRecord[String, Array[Byte]], Future[Done]] = {

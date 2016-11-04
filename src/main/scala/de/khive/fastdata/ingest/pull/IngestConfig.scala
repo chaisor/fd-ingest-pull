@@ -22,14 +22,14 @@ package de.khive.fastdata.ingest.pull
 import com.typesafe.config.ConfigFactory
 
 /**
-  * Created by ceth on 03.11.16.
-  */
+ * Created by ceth on 03.11.16.
+ */
 object IngestConfig {
 
   val SOURCE_ACTOR_BUFFER_SIZE = 100
 
   def fromArgs(args: Array[String]): IngestConfig = {
-    if(args.length != 6) {
+    if (args.length != 6) {
       throw new IllegalArgumentException("")
     }
 
@@ -59,19 +59,20 @@ object IngestConfig {
 }
 
 /**
-  * Current Config Case Class
-  *
-  * @param pullUrl
-  * @param pullDuration
-  * @param forwardKafkaClientId
-  * @param forwardKafkaBootstrapServer
-  * @param forwardKafkaZookeeperConnect
-  * @param forwardKafkaTopic
-  */
+ * Current Config Case Class
+ *
+ * @param pullUrl
+ * @param pullDuration
+ * @param forwardKafkaClientId
+ * @param forwardKafkaBootstrapServer
+ * @param forwardKafkaZookeeperConnect
+ * @param forwardKafkaTopic
+ */
 sealed case class IngestConfig(
-              pullUrl: String,
-              pullDuration: Int,
-              forwardKafkaClientId: String,
-              forwardKafkaBootstrapServer: String,
-              forwardKafkaZookeeperConnect: String,
-              forwardKafkaTopic: String)
+  pullUrl: String,
+  pullDuration: Int,
+  forwardKafkaClientId: String,
+  forwardKafkaBootstrapServer: String,
+  forwardKafkaZookeeperConnect: String,
+  forwardKafkaTopic: String
+)

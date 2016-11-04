@@ -26,20 +26,20 @@ import org.slf4j.LoggerFactory
 import scala.io.Source
 
 /**
-  * Utils for pulling remote content and forward it
-  * to stream subscribers.
-  *
-  * Created by ceth on 03.11.16.
-  */
+ * Utils for pulling remote content and forward it
+ * to stream subscribers.
+ *
+ * Created by ceth on 03.11.16.
+ */
 object PullPayloadUtils {
 
   val log = LoggerFactory.getLogger(getClass)
 
   /**
-    * Pull content from <code>url</code> and forward it using the <code>forwardFunction</code>.
-    *
-    * @param url
-    */
+   * Pull content from <code>url</code> and forward it using the <code>forwardFunction</code>.
+   *
+   * @param url
+   */
   def pullPayload(url: String): Array[Byte] = {
     log.debug(s"Pull payload from ${url}...")
     Source.fromURL(url).mkString.getBytes(StandardCharsets.UTF_8)

@@ -13,11 +13,31 @@ licenses := Seq("GNU General Public License (GPL), Version 3.0"
 
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 
+val nexusHttpMethod = System.getenv("NEXUS_HTTP_METHOD")
+val nexusUrl = System.getenv("NEXUS_URL")
+val nexusRepositoryPath = System.getenv("NEXUS_REPOSITORY_PATH")
+val nexusUsername = System.getenv("NEXUS_USERNAME")
+val nexusPassword = System.getenv("NEXUS_PASSWORD")
+
+val credentialsFile = (Path.userHome / ".sbt" / ".credentials")
+def credentialProvider(): Credentials = {
+  if(credentialsFile.exists()){
+    Credentials(credentialsFile)
+  } else {
+    Credentials("Nexus Repository Manager", nexusUrl, nexusUsername, nexusPassword)
+  }
+}
+
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
-  Resolver.sonatypeRepo("snapshots"),
-  Resolver.typesafeRepo("releases")
+  "twitter" at "http://maven.twttr.com",
+  "sonatype" at "https://oss.sonatype.org/content/groups/public",
+  "nexus-khive" at "https://nexus.k-hive.de/repository/maven-releases/",
+  "nexus-khive-snapshots" at "https://nexus.k-hive.de/repository/maven-snapshots/"
 )
+
+publishMavenStyle := true
+publishTo := Some("Nexus Repository" at s"$nexusHttpMethod://$nexusUrl/$nexusRepositoryPath")
+credentials += credentialProvider()
 
 libraryDependencies ++= {
   val akkaV       = "2.4.7"
@@ -124,7 +144,8 @@ incOptions := incOptions.value.withNameHashing(true)
 
 
 
-import com.typesafe.sbt.license.{LicenseInfo, DepModuleInfo}
+import Build._
+import com.typesafe.sbt.license.{DepModuleInfo, LicenseInfo}
 
 // Attach notes to modules
 licenseReportNotes := {
@@ -137,3 +158,7 @@ licenseOverrides := {
   case DepModuleInfo("org.apache.spark", _, _) =>
     LicenseInfo(LicenseCategory.Apache, "Apache 2.0", "http://opensource.org/licenses/apache-2.0")
 }
+
+EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Resource
+EclipseKeys.eclipseOutput := Some(".target")
+EclipseKeys.skipParents in ThisBuild := false
