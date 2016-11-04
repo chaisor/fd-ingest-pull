@@ -58,7 +58,7 @@ libraryDependencies ++= {
     "com.typesafe.akka"           %% "akka-cluster-metrics"              % akkaV,
     "com.typesafe.akka"           %% "akka-remote"                       % akkaV,
     "com.typesafe.akka"           %% "akka-slf4j"                        % akkaV,
-    "com.typesafe.akka"           %% "akka-contrib"			 % akkaV,
+    "com.typesafe.akka"           %% "akka-contrib"			                 % akkaV,
     "com.typesafe.akka"           %% "akka-stream"                       % akkaV,
     "com.typesafe.akka"           %% "akka-http-core"                    % akkaV,
     "com.typesafe.akka"           %% "akka-http-experimental"            % akkaV,
