@@ -2,6 +2,8 @@ name := "fd-ingest-pull"
 
 version := "1.0"
 
+organization := "de.khive"
+
 scalaVersion := "2.11.8"
 crossScalaVersions := Seq("2.11.8")
 
@@ -141,8 +143,6 @@ wartremover.wartremoverErrors in (Compile, compile) ++= Seq(
 enablePlugins(GatlingPlugin)
 
 incOptions := incOptions.value.withNameHashing(true)
-
-
 
 import Build._
 import com.typesafe.sbt.license.{DepModuleInfo, LicenseInfo}
