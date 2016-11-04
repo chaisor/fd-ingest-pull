@@ -40,3 +40,37 @@ Starting the application with "java -jar ..." and passing configuration params i
 ```
 
 Use Case: Run application from inside a docker container and pass environment variables for example through mesosphere marathon configuration
+
+Artifact Availability
+=====================
+
+I publish deployment artifacts on my nexus server. You can add my nexus to your repo list.
+
+SBT
+---
+Add the nexus to your resolvers Seq in build.sbt file:
+
+```
+    resolvers ++= Seq(
+      ...
+      "nexus-khive" at "https://nexus.k-hive.de/repository/maven-releases/",
+      "nexus-khive-snapshots" at "https://nexus.k-hive.de/repository/maven-snapshots/",
+      ...
+    )
+```
+
+Apache Maven
+------------
+
+Add the nexus as repository in your pom.xml file:
+
+```
+    <repositories> 
+      <repository>
+        <id>nexus-of-ceth</id>
+        <url>https://nexus.k-hive.de/repository/</url>
+        <snapshots><enabled>false</enabled></snapshots>
+        <releases><enabled>true</enabled></releases>
+      </repository>
+    </repositories>
+```
