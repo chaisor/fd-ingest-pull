@@ -57,11 +57,19 @@ Add the nexus to your resolvers Seq in build.sbt file:
       "nexus-khive-snapshots" at "https://nexus.k-hive.de/repository/maven-snapshots/",
       ...
     )
+    
+    libraryDependencies ++= {
+      val fdIngestPullV = "1.0"
+      Seq(
+        ...
+        "de.khive.fd"           %% "fd-ingest-pull"                        % fdIngestPullV,
+        ...
+      )
+    }
 ```
 
 Apache Maven
 ------------
-
 Add the nexus as repository in your pom.xml file:
 
 ```
@@ -73,4 +81,14 @@ Add the nexus as repository in your pom.xml file:
         <releases><enabled>true</enabled></releases>
       </repository>
     </repositories>
+    
+    <dependencies>
+        ...
+        <dependency>
+          <groupId>de.khive.fd</groupId>
+          <artifactId>fd-ingest-pull</artifactId>
+          <version>1.0</version>
+        </dependency>
+        ...
+    </dependencies>
 ```
